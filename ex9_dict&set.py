@@ -54,12 +54,12 @@ print(b)
 
 # 练习 解释为什么会出错
 d = {"t1": (1, 2, 3), "t2": (1, [2, 3]), "t3": 44} # 值可以为可变元素
-d = {"t1": (1, 2, 3), (1, [2, 3]): 54, "t3": 44} # 报错 TypeError: unhashable type: 'list'，要保证hash的正确性，作为key的对象就不能变，key必须为不可变的，
+# d = {"t1": (1, 2, 3), (1, [2, 3]): 54, "t3": 44} # 报错 TypeError: unhashable type: 'list'，要保证hash的正确性，作为key的对象就不能变，key必须为不可变的，
 print(d["t2"])
-s = set([(1, 2, 3), (1, [2, 3]), 1, 2]) # 报错 TypeError: unhashable type: 'list'，因为key必须为不可变的
+# s = set([(1, 2, 3), (1, [2, 3]), 1, 2]) # 报错 TypeError: unhashable type: 'list'，因为key必须为不可变的
 
 # list、tuple、dict和set总结
 L = [1, 2, 3] # list数组的值可以改变，如 L[0] = 9
-T = (4, 5, [1, 2, 3]) # tuple元组的每个元素，指向永远不变，要创建一个内容不变的tuple，就要保证每个元素本身不变
+T = (4, 5, [1, 2, 3]) # tuple元组的每个元素，指向永远不变,如 不支持T[0] = 3修改值,，要创建一个内容不变的tuple，就要保证每个元素本身不变
 D = {"d1": 33, "d2": [1, 2], "d3": 55} # dict字典key本身必须是不可变元素，通过hash计算value地址，value可以为可变元素
 S = set([1, (2, 3, 4), 5]) # set集合为key的无序和无重复的集合，集合的元素key本身必须是不可变的
