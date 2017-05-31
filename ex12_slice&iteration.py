@@ -24,7 +24,7 @@ print(t[:3])
 print('ABCDEFG'[:3])
 print('ABCDEFG'[::2])
 
-# 迭代（iteration） 通过迭（叠）加带入的方式遍历，比如说，可以通过for循环来遍历list或tuple
+# 迭代（iteration） 通过迭（叠）加带入的方式遍历，比如说，可以通过for循环来遍历list或tuple，以上一次结果作为下一次的初始值
 # 对于很多没有下标的数据类型，python都可以迭代
 # 如 dict
 d = {'a':1, 'b': 2, 'c': 3}
