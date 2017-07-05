@@ -27,8 +27,8 @@ def add(x, y):
 	return x + y
 print(reduce(add, [1, 3, 5, 7, 9]))
 
-def fn(x, y):
-	return x * 10 + y # 把序列变成整数
+def fn(x, y): # 把序列变成整数
+	return x * 10 + y
 def char2num(s):
 	return {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9}[s] # 返回相应键的值
 # print(char2num('2345')) # 会出现键值错误，因为会直接以'2345'这个键值寻找对应的值，肯定是没有的
@@ -68,11 +68,12 @@ CHAR_TO_FLOAT = {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7,
 def str2float(s):	
 	
 	nums = map(lambda ch: CHAR_TO_FLOAT[ch], s)
+	
 	point = 0
 	def to_float(f, n): # 开始接收迭代器nums从左到右开始的两个数值
-		nonlocal point
+		nonlocal point # 使用外层变量point，和global（全局变量）有区别
 		if n == -1:
-			point = 1
+			point = 1 # 确定接下来的数全在小数点（.）后面
 			return f
 		if point == 0:
 			return f * 10 + n
@@ -82,3 +83,45 @@ def str2float(s):
 	return reduce(to_float, nums)
 print('%.3f' % (str2float('123.451')))	 # 不指定小数点后的位数，则返回值是123.45100000000001
 print(123.45 + 0.001) # 结果也是123.45100000000001
+
+# filter() 把传入的函数依次作用于每个元素，然后根据返回值是True还是False决定保留还是丢弃该元素
+# 在list中，删掉偶数，只保留奇数
+def is_odd(n):
+	return n % 2 == 1 # 与2求余数，余数和1相等时表达式为真，为奇数
+print(list(filter(is_odd, [1, 2, 4, 5, 6, 9, 10, 15]))) # 返回真则保留，假则丢弃
+from collections import Iterable
+from collections import Iterator
+print(isinstance(filter(is_odd, [1, 2, 4, 5, 6, 9, 10, 15]), Iterable)) # 为真，可迭代
+print(isinstance(filter(is_odd, [1, 2, 4, 5, 6, 9, 10, 15]), Iterator)) # filter()函数返回的是一个Iterator，是一个惰性序列，要filter()完成计算结果，需要用list()函数获得所有结果并返回list
+
+# 把一个序列中的空字符串删掉
+def not_empty(s):
+	return s and s.strip() # strip()删除字符串中的空格，如果为strip('str'),删除指定的字符str
+print(list(filter(not_empty, ['A', '', 'B', None, 'C', ' ']))) # 列表中存在空字符串，None，空格
+
+# 用filter求素数，计算素数的一个方法是埃氏筛法，
+# 先构造一个从3开始的奇数序列
+def _odd_iter():
+	n = 1
+	while True:
+		n = n + 2
+		yield n
+# 这是一个生成器，并且是一个无限序列
+# 再定义一个筛选函数
+def _not_divisible(n):
+	return lambda x: x % n > 0 # 余数大于0，为奇数, 参数x 接收序列，返回表达式的布尔值
+# 最后定义一个生成器，不断返回下一个素数
+def primes():
+	yield 2
+	it = _odd_iter() # 初始化序列，由于是生成器，还需迭代
+	while True:
+		n = next(it) # 使用next()迭代，返回序列第一个数
+		
+		yield n
+		it = filter(_not_divisible(n), it) # 构造经过筛选后的序列
+		print('ddd')
+for n in primes():
+	if n < 13:
+		print(n)
+	else:
+		break

@@ -22,7 +22,7 @@ d_2 = {'x': 'A', 'y': 'B', 'z': 'C'}
 print([k + '=' + v for k, v in d_2.items()])
 
 L = ['Hello', 'World', 18, 'Apple', None]
-L1 =[s.lower() for s in L if isinstance(s, str)]
+L1 =[s.lower() for s in L if isinstance(s, str)] # isinstance() 判断对象是否是已知类型
 print (L1)
 
 # 生成器。不必创建完整的list，通过在循环过程中不断推算出后续的元素，节省大量的空间，这种一边循环一边计算的机制，称为生成器：generator(保存的是算法)
@@ -70,8 +70,8 @@ while True:
 		# 获得下一个值
 		x = next(f)
 		print('hhh', x)
-	except StopIteration:
-		# 遇到StopIteration就退出循环
+	except StopIteration:  
+		# except语句遇到StopIteration就退出循环
 		break
 def odd():
 	print("step 1")
@@ -88,21 +88,21 @@ next(o)
 
 
 # 但是用for循环调用generator时，发现获取不到generator的return语句的返回值，如果想要拿到返回值，必须捕获StopIteration错误，返回值包含在StopIteration的value中
-# g = fib1(7)
-# while True:
-	# try:
-		# x = next(g)
-		# print('g:', x)
-	# except StopIteration as e:
-		# print('Generator return value:', e.value)
-		# break
+g = fib1(7)
+while True:
+	try:
+		x = next(g)
+		print('g:', x)
+	except StopIteration as e:
+		print('Generator return value:', e.value)
+		break
 
 # 练习 杨辉三角（不会做）
 def triangles():
 	L = [1]
 	while True:
 		yield L
-		L.append(0) # 补一个0，对初始列表[1]补全为[1, 0]，根据杨辉三角规律，计算出新列表第一个元素；每次循环列表都增加一个元素
+		L.append(0) # 补一个0，对初始列表[1]补全为[1, 0]，根据杨辉三角规律，0隐式存在，计算出新列表第一个元素；每次循环列表都增加一个元素
 		L = [L[i-1]+L[i] for i in range(len(L))] # 通过列表生成式创建列表，根据len(L)长度i确定元素个数，并定位操作元素计算
 		# L[i-1] + L[i],新列表的第一个元素由旧列表的最后一个元素与第一个元素之和得出，以此类推
 n = 0
