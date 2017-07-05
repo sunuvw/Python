@@ -115,10 +115,9 @@ def primes():
 	yield 2
 	it = _odd_iter() # 初始化序列，由于是生成器，还需迭代
 	while True:
-		n = next(it) # 使用next()迭代，返回序列第一个数
-		
+		n = next(it) # 使用next()迭代it，返回序列第一个数（下一次返回经过嵌套筛选的）		
 		yield n
-		it = filter(_not_divisible(n), it) # 构造经过筛选后的序列
+		it = filter(_not_divisible(n), it) # 构造经过筛选后的序列,此处开始嵌套，一层层嵌套筛选计算
 		print('ddd')
 for n in primes():
 	if n < 13:
