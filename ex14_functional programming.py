@@ -109,18 +109,54 @@ def _odd_iter():
 # 这是一个生成器，并且是一个无限序列
 # 再定义一个筛选函数
 def _not_divisible(n):
-	return lambda x: x % n > 0 # 余数大于0，为奇数, 参数x 接收序列，返回表达式的布尔值
+	return lambda x: x % n > 0 # 余数大于0，为奇数, 参数x 接收序列？？（为什么x接收序列），返回表达式的布尔值
 # 最后定义一个生成器，不断返回下一个素数
 def primes():
 	yield 2
 	it = _odd_iter() # 初始化序列，由于是生成器，还需迭代
 	while True:
-		n = next(it) # 使用next()迭代it，返回序列第一个数（下一次返回经过嵌套筛选的）		
+		n = next(it) # 使用next()迭代it，返回序列第一个数（下一次返回经过递归筛选的）		
 		yield n
-		it = filter(_not_divisible(n), it) # 构造经过筛选后的序列,此处开始嵌套，一层层嵌套筛选计算
+		it = filter(_not_divisible(n), it) # 构造经过筛选后的序列,此处开始递归，一层层递归筛选计算,
+		# filter(_not_divisible(9),filter(_not_divisible(7),filter(_not_divisible(5),filter(_not_divisible(3),_odd_iter))))
 		print('ddd')
 for n in primes():
 	if n < 13:
 		print(n)
 	else:
 		break
+
+# 练习 筛选出回数，从左到右读和从右到左读都是一样的数，例如12321，909
+def is_palindrome(n): # 傻版本
+	nums = str(n) # 将整数转化为字符串，以方便取位比较
+	i = 0
+	while i < len(nums)/2: # 折中比较
+		if nums[i] == nums[len(nums)-1-i]: # 首尾逐个比较，如果是回数，折中比较完毕，退出循环
+			i = i + 1
+		else: # 如果不是回数，返回False
+			return False 
+	return True # 比较完毕，是回数，返回True
+output = filter(is_palindrome, range(1, 10000))
+print(list(output))		
+def is_palindrome_v1(n): # 高级版本
+	return n == int(str(n)[::-1]) # 切片[::-1]，切片——L[起始:结束:方向]，从右到左，每隔一个取，即将字符串化的str(n)倒序，再转换为整数与原数比较
+output = filter(is_palindrome_v1, range(1, 10000))
+print(list(output))
+
+# sorted()排序函数
+print(sorted([36, 5, -12, 9, -21])) # 按从小到大进行排列
+# sorted()作为高阶函数，还可以接收一个key函数来实现自定义排序
+print(sorted([36, 5, -12, 9, -21], key = abs)) # 如绝对值函数
+# key指定的函数作用于list的每一个元素，并根据key函数返回的结果进行排序，再根据对应关系（映射关系）返回list最终结果
+# 对比原始的list和经过key = abs处理过的list
+# list = [36, 5, -12, 9, -21] --> keys = [36, 5, 12, 9, 21] --> sorted()函数按照keys排序结果[5, 9, 12, 21, 36] -->再按照对应关系返回list最终结果[5, 9, -12, -21, 36]
+# 按字母ASCII排序，由于'Z'<'a',大写字母Z会排在小写字母a的前面
+print(sorted(['bob', 'about', 'Zoo', 'Credit'], key = str.lower, reverse = True)) # 用key函数str.lower把字符串映射为忽略大小写再进行排序，最后反转reverse排序
+
+L = [('Bob', 75), ('Adam', 92), ('Bart', 66), ('Lisa', 88)]
+def by_name(t):
+	return t[0]
+print(sorted(L, key = by_name))
+def by_score(t):
+	return t[1]
+print(sorted(L, key = by_score))
