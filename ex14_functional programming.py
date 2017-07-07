@@ -110,7 +110,8 @@ def _odd_iter():
 # 再定义一个筛选函数
 def _not_divisible(n):
 	return lambda x: x % n > 0 # 余数大于0，为奇数, 参数x 接收序列？？（为什么x接收序列），返回表达式的布尔值
-# 最后定义一个生成器，不断返回下一个素数
+	# 例 (_not_divisible(3))(2) --> lambda 2: 2 % 3 > 0,n接收形参，x接收位置参数，详见ex15
+	# 最后定义一个生成器，不断返回下一个素数
 def primes():
 	yield 2
 	it = _odd_iter() # 初始化序列，由于是生成器，还需迭代
