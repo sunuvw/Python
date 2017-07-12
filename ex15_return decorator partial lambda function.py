@@ -108,7 +108,7 @@ def log_v1(text):
 @log_v1('execute')# 相当于执行now_v2 = log_v1('execute')(now_v2)
 def now_v2(): 
 	print('2017-7-9')
-now_v2() # log_v1('execute')(now_v2)() ---> 首先执行log_v1('execute') 返回decorator函数，再调用执行decorator(now_v2),最终返回wrapper函数，再调用执行wrapper()
+now_v2() # log_v1('execute')(now_v2)() ---> 首先执行log_v1('execute') 返回decorator函数，再调用执行decorator(now_v2)(),最终返回wrapper函数，再调用执行wrapper()
 print(now_v2.__name__) # 经过修饰器后now_v2的__name__属性变了
 
 
@@ -127,7 +127,7 @@ def now_v3():
 	print('2017-7-10')
 now_v3()
 # 练习2，编写一个既可以支持参数也可以不支持参数的decorator
-def log_v4(text1 = None, text2 = None): # 可以先赋空值
+def log_v4(text1 = None, text2 = None): # 当不指定参数时,参数默认值为None
 	def decorator(func):
 		@functools.wraps(func)
 		def wrapper(*args, **kw):
@@ -141,7 +141,18 @@ def log_v4(text1 = None, text2 = None): # 可以先赋空值
 				print('%s():' % (func.__name__))
 		return wrapper 
 	return decorator
-@log_v4('start call','end call')
-def now_v4():
+@log_v4(555,'end call')
+def now_v4(): # 可以不指定参数
 	print('2017-7-10')
 now_v4()
+
+# 偏函数，functools 模块提供了一个偏函数partial function
+# functools.partial(func, *args, **kw) 就是把一个函数的某些参数给固定住（设置默认值），返回一个新的函数，
+import functools
+int2 = functools.partial(int, base = 2) # 将int()函数的参数base（进制） 默认设置为 2，生成一个新函数，将2进制转换为10进制
+print(int2('1011'))
+# 相当于
+# kw = {'base': 2}
+# int{'10', **kw}
+max2 = functools.partial(max, 10) # 实际上会把10作为*args的一部分自动加到左边
+print(max2(2, 3, 4)) # 相当于max2(10, 2, 3, 4)
